@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.Subsystems;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import org.photonvision.PhotonCamera;
@@ -37,13 +38,22 @@ public class VisionSubSystem extends SubsystemBase {
   public boolean hasTargets(){
     return mCamera.getLatestResult().hasTargets();
   }
-
-  public double getRange(double targetHeight){
+  public Translation2d getTransDiff(double targetHeight){
     if(hasTargets()){
-      return PhotonUtils.calculateDistanceToTargetMeters(mCameraHeight, targetHeight, mCameraPitch, Units.degreesToRadians(mCamera.getLatestResult().getBestTarget().getPitch()));
+
+      //TODO might need to change theta to yaw instead of pitch not sure tho
+      double theta = mCamera.getLatestResult().getBestTarget().getPitch();
+      double distance = PhotonUtils.calculateDistanceToTargetMeters(
+        mCameraHeight, 
+        targetHeight, 
+        mCameraPitch,
+        theta);
+      double xDiff = distance * Math.cos(theta);
+      double yDiff = distance * Math.sin(theta);
+      return new Translation2d(xDiff, yDiff);
     }
     else{
-      return 0;
+      return new Translation2d();
     }
   }
 

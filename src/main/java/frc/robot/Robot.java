@@ -136,9 +136,9 @@ public class Robot extends TimedRobot {
     if(xbox.getAButtonPressed()){
       vision.toggleDriverMode();
     }
+    //Schedule command to get in range
     if(xbox.getBButtonPressed() && !vision.getDriverMode()){
-      Translation2d trans = new Translation2d(vision.getRange(1), 0);
-      CommandScheduler.getInstance().schedule(new SwerveGoCartesianF(swerveDrive, trans, .25));
+      CommandScheduler.getInstance().schedule(new SwerveGoCartesianF(swerveDrive, vision.getTransDiff(1), .25));
     }
 
     CommandScheduler.getInstance().run();
