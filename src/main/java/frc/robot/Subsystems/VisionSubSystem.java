@@ -10,7 +10,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 public class VisionSubSystem extends SubsystemBase {
 
-//ALL ANGLES IN RADIANS
+  //**ALL ANGLES IN RADIANS ALL DISTANCES IN METERS**//
   PhotonCamera mCamera;
   VisionSubSystem INSTANCE;
   double mCameraHeight;
