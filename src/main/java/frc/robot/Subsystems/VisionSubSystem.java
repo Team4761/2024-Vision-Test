@@ -12,15 +12,14 @@ public class VisionSubSystem extends SubsystemBase {
 
   //**ALL ANGLES IN RADIANS ALL DISTANCES IN METERS**//
   PhotonCamera mCamera;
-  VisionSubSystem INSTANCE;
-  double mCameraHeight;
-  double mCameraPitch;
-  public VisionSubSystem(double cameraHeight, double cameraPitch){
+  private static final VisionSubSystem INSTANCE = new VisionSubSystem();
+  double mCameraHeight = 0;
+  double mCameraPitch = 0;
+
+  private boolean mDriverMode = false;
+  public VisionSubSystem(){
     //Replace with name of cam
-    mCameraHeight = cameraHeight;
-    mCameraPitch = cameraPitch;
     mCamera = new PhotonCamera(getName());
-    INSTANCE = new VisionSubSystem(mCameraHeight, mCameraPitch);
   }
 
   @Override
@@ -28,7 +27,7 @@ public class VisionSubSystem extends SubsystemBase {
     
   }
 
-  public VisionSubSystem getInstance(){
+  public static VisionSubSystem getInstance(){
     return INSTANCE;
   }
 
@@ -47,5 +46,14 @@ public class VisionSubSystem extends SubsystemBase {
     else{
       return 0;
     }
+  }
+
+  public void toggleDriverMode(){
+    mDriverMode = !mDriverMode;
+    mCamera.setDriverMode(mDriverMode);
+  }
+  //Returns false if not in driver mode
+  public boolean getDriverMode(){
+    return mCamera.getDriverMode();
   }
 }

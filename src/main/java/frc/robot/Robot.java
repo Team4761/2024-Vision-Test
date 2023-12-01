@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Commands.SwerveGoCartesianF;
 import frc.robot.Subsystems.SwerveDrive;
+import frc.robot.Subsystems.VisionSubSystem;
 
 //import frc.robot.Subsystems.SwerveDrive;
 
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
 
   public static XboxController xbox = new XboxController(0);
   public static SwerveDrive swerveDrive = SwerveDrive.getInstance();
+  public static VisionSubSystem vision = VisionSubSystem.getInstance();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -112,7 +114,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //swerveDrive.swerveDriveR(xbox.getLeftY(), -xbox.getLeftX(), xbox.getRightX());
-
+    SmartDashboard.putBoolean("Driver Mode (Vision)", vision.getDriverMode());
     //inverse of magnitude to normalize x and y
     double xyCof = 0.75/Math.max(0.001, Math.sqrt(Math.pow(deadzone(xbox.getLeftX(), 0.1), 2)+Math.pow(deadzone(xbox.getLeftY(), 0.1), 2)));
     swerveDrive.swerveDriveF(xyCof*deadzone(xbox.getLeftX(), 0.1)*(xbox.getLeftTriggerAxis()+xbox.getRightTriggerAxis()), -xyCof*deadzone(xbox.getLeftY(), 0.1)*(xbox.getLeftTriggerAxis()+xbox.getRightTriggerAxis()), -deadzone(xbox.getRightX(), 0.08));
@@ -130,6 +132,15 @@ public class Robot extends TimedRobot {
     if(xbox.getYButtonPressed()) {
       swerveDrive.resetPose();
     }
+
+    if(xbox.getAButtonPressed()){
+      vision.toggleDriverMode();
+    }
+    if(xbox.getBButtonPressed() && !vision.getDriverMode()){
+      Translation2d trans = new Translation2d(vision.getRange(1), 0);
+      CommandScheduler.getInstance().schedule(new SwerveGoCartesianF(swerveDrive, trans, .25));
+    }
+
     CommandScheduler.getInstance().run();
     //swerveDrive.periodic();
   }
