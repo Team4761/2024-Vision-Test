@@ -40,16 +40,16 @@ public class VisionSubSystem extends SubsystemBase {
   }
   public Translation2d getTransDiff(double targetHeight){
     if(hasTargets()){
-      double linearTheta = mCamera.getLatestResult().getBestTarget().getPitch();
+      double pitch = Units.degreesToRadians(mCamera.getLatestResult().getBestTarget().getPitch());
       double distance = PhotonUtils.calculateDistanceToTargetMeters(
         mCameraHeight, 
         targetHeight, 
         mCameraPitch,
-        linearTheta);
-      double theta = mCamera.getLatestResult().getBestTarget().getYaw();
-      double yDiff = distance * Math.cos(linearTheta);
-      double xDiff = yDiff / Math.cos(theta) * Math.sin(theta);
-      return new Translation2d(xDiff - 1, yDiff);
+        pitch);
+      double yaw = Units.degreesToRadians(mCamera.getLatestResult().getBestTarget().getYaw());
+      double yDiff = distance * Math.cos(pitch);
+      double xDiff = yDiff / Math.cos(yaw) * Math.sin(yaw);
+      return new Translation2d(xDiff, yDiff - 1);
     }
     else{
       return new Translation2d();
