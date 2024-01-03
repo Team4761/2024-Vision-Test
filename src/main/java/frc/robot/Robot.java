@@ -114,7 +114,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //swerveDrive.swerveDriveR(xbox.getLeftY(), -xbox.getLeftX(), xbox.getRightX());
-    SmartDashboard.putBoolean("Driver Mode (Vision)", vision.getDriverMode());
+    // SmartDashboard.putBoolean("Driver Mode (Vision)", vision.getDriverMode());
     //inverse of magnitude to normalize x and y
     double xyCof = 0.75/Math.max(0.001, Math.sqrt(Math.pow(deadzone(xbox.getLeftX(), 0.1), 2)+Math.pow(deadzone(xbox.getLeftY(), 0.1), 2)));
     swerveDrive.swerveDriveF(xyCof*deadzone(xbox.getLeftX(), 0.1)*(xbox.getLeftTriggerAxis()+xbox.getRightTriggerAxis()), -xyCof*deadzone(xbox.getLeftY(), 0.1)*(xbox.getLeftTriggerAxis()+xbox.getRightTriggerAxis()), -deadzone(xbox.getRightX(), 0.08));
@@ -133,13 +133,13 @@ public class Robot extends TimedRobot {
       swerveDrive.resetPose();
     }
 
-    if(xbox.getAButtonPressed()){
-      vision.toggleDriverMode();
-    }
-    //Schedule command to get in range
-    if(xbox.getBButtonPressed() && !vision.getDriverMode()){
-      CommandScheduler.getInstance().schedule(new SwerveGoCartesianF(swerveDrive, vision.getTransDiff(1), .25));
-    }
+    // if(xbox.getAButtonPressed()){
+    //   vision.toggleDriverMode();
+    // }
+    // //Schedule command to get in range
+    // if(xbox.getBButtonPressed() && !vision.getDriverMode()){
+    //   CommandScheduler.getInstance().schedule(new SwerveGoCartesianF(swerveDrive, vision.getTransDiff(1), .25));
+    // }
 
     CommandScheduler.getInstance().run();
     //swerveDrive.periodic();
